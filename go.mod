@@ -1,4 +1,4 @@
-module ineed-engine
+module github.com/b92c/ineed-engine
 
 go 1.22.1
 
