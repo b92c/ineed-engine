@@ -1,18 +1,17 @@
-# Simple Makefile for a Go project
+BINDIR := bin
+BINARY := $(BINDIR)/main
 
-# Build the application
 all: build
 
 build:
 	@echo "Building..."
-	
-	@go build -o main cmd/api/main.go
+	@mkdir -p $(BINDIR)
+	@go build -o $(BINARY) cmd/api/main.go
 
-# Run the application
 run:
 	@go run cmd/api/main.go
 
-# Create DB container
+
 docker-run:
 	@if docker compose up 2>/dev/null; then \
 		: ; \
@@ -21,7 +20,6 @@ docker-run:
 		docker-compose up; \
 	fi
 
-# Shutdown DB container
 docker-down:
 	@if docker compose down 2>/dev/null; then \
 		: ; \
@@ -30,17 +28,14 @@ docker-down:
 		docker-compose down; \
 	fi
 
-# Test the application
 test:
 	@echo "Testing..."
 	@go test ./tests -v
 
-# Clean the binary
 clean:
 	@echo "Cleaning..."
-	@rm -f main
+	@rm -f $(BINARY)
 
-# Live Reload
 watch:
 	@if command -v air > /dev/null; then \
 	    air; \
