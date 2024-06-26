@@ -1,11 +1,12 @@
 package tests
 
 import (
-	"github.com/gin-gonic/gin"
-	"ineed-engine/internal/server"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/b92c/ineed-engine/internal/server"
+	"github.com/gin-gonic/gin"
 )
 
 func TestHelloWorldHandler(t *testing.T) {

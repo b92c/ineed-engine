@@ -9,13 +9,12 @@ import (
 
 	_ "github.com/joho/godotenv/autoload"
 
-	"ineed-engine/internal/database"
+	"github.com/b92c/ineed-engine/internal/database"
 )
 
 type Server struct {
 	port int
-
-	db database.Service
+	db   database.Service
 }
 
 func NewServer() *http.Server {

@@ -1,17 +1,47 @@
-version: '3.8'
-
 services:
+  api:
+    image: ineed-engine:latest
+    container_name: ineed-engine-api
+    profiles: ["all", "api"]
+    build:
+      context: .
+      dockerfile: ./pkg/build/Dockerfile
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    restart: always
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      APP_PORT: ${APP_PORT}
+    volumes:
+      - .:/app
+      - ./bin:/root/bin
+    depends_on:
+      - mysql
+    networks:
+      - ineed-engine-network
+
   mysql:
     image: mysql:latest
+    container_name: ineed-engine-db
+    profiles: ["all", "db"]
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     ports:
-      - "${DB_PORT}:3306"
+      - "3308:3306"
     volumes:
       - mysql_volume:/var/lib/mysql
+    networks:
+      - ineed-engine-network
 
 volumes:
   mysql_volume:
+
+networks:
+  ineed-engine-network:
+    name: ineed-engine-network
+    external: true

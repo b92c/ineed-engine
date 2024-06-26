@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"ineed-engine/internal/server"
+
+	"github.com/b92c/ineed-engine/internal/server"
 )
 
 func main() {
