@@ -7,24 +7,23 @@ import (
 	"strconv"
 	"time"
 
-	fh "github.com/b92c/ineed-engine/internal/freelancers/handler"
-	hch "github.com/b92c/ineed-engine/internal/healthcheck/handler"
+	c "github.com/b92c/ineed-engine/internal/adapters/controllers"
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
 )
 
 type Server struct {
-	port             int
-	freelanceHandler *fh.FreelanceSearchHandler
-	healthHandler    *hch.HealthCheckHandler
+	port                  int
+	SearchController      *c.SearchController
+	HealthCheckController *c.HealthCheckController
 }
 
-func NewServer(freelanceHandler *fh.FreelanceSearchHandler, healthHandler *hch.HealthCheckHandler) *http.Server {
+func NewServer(SearchController *c.SearchController, HealthCheckController *c.HealthCheckController) *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 	serverInstance := &Server{
-		port:             port,
-		freelanceHandler: freelanceHandler,
-		healthHandler:    healthHandler,
+		port:                  port,
+		SearchController:      SearchController,
+		HealthCheckController: HealthCheckController,
 	}
 
 	// Declare Server config
@@ -43,10 +42,10 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r := gin.Default()
 
 	// Freelance routes
-	r.GET("/freelance-search", s.freelanceHandler.HelloWorldHandler)
+	r.GET("/search", s.SearchController.HelloWorldHandler)
 
 	// Health check routes
-	r.GET("/health", s.healthHandler.HealthCheck)
+	r.GET("/health", s.HealthCheckController.HealthCheck)
 
 	return r
 }
