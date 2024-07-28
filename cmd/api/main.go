@@ -3,10 +3,8 @@ package main
 import (
 	"fmt"
 
-	fh "github.com/b92c/ineed-engine/internal/freelancers/handler"
-	fs "github.com/b92c/ineed-engine/internal/freelancers/service"
-	hch "github.com/b92c/ineed-engine/internal/healthcheck/handler"
-	hcs "github.com/b92c/ineed-engine/internal/healthcheck/service"
+	c "github.com/b92c/ineed-engine/internal/adapters/controllers"
+	uc "github.com/b92c/ineed-engine/internal/usecases"
 	"github.com/b92c/ineed-engine/pkg/database"
 	"github.com/b92c/ineed-engine/pkg/server"
 )
@@ -20,14 +18,14 @@ func main() {
 	defer db.Close()
 
 	// Dependency injection
-	FreelanceSearchService := fs.NewFreelanceSearchService(db)
-	freelanceSearchHandler := fh.NewFreelanceSearchHandler(FreelanceSearchService)
+	SearchUsecase := uc.NewSearchUsecase(db)
+	searchController := c.NewSearchController(SearchUsecase)
 
-	HealthCheckService := hcs.NewHealthCheckService(db)
-	HealthCheckHandler := hch.NewHealthCheckHandler(HealthCheckService)
+	HealthCheckUsecase := uc.NewHealthCheckUsecase(db)
+	HealthCheckController := c.NewHealthCheckController(HealthCheckUsecase)
 
 	// Start server
-	server := server.NewServer(freelanceSearchHandler, HealthCheckHandler)
+	server := server.NewServer(searchController, HealthCheckController)
 
 	err = server.ListenAndServe()
 	if err != nil {

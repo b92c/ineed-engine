@@ -1,4 +1,4 @@
-package service
+package usecases
 
 import (
 	"context"
@@ -6,15 +6,15 @@ import (
 	"github.com/b92c/ineed-engine/pkg/database"
 )
 
-type HealthCheckService struct {
+type SearchUsecase struct {
 	db database.DB
 }
 
-func NewHealthCheckService(db database.DB) *HealthCheckService {
-	return &HealthCheckService{db: db}
+func NewSearchUsecase(db database.DB) *SearchUsecase {
+	return &SearchUsecase{db: db}
 }
 
-func (s *HealthCheckService) GetHealthStatus(ctx context.Context) (map[string]string, error) {
+func (s *SearchUsecase) GetHealthStatus(ctx context.Context) (map[string]string, error) {
 	stats := make(map[string]string)
 	err := s.db.PingContext(ctx)
 	if err != nil {
