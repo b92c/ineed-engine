@@ -42,7 +42,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r := gin.Default()
 
 	// Freelance routes
-	r.GET("/search", s.SearchController.HelloWorldHandler)
+	r.GET("/search", s.SearchController.Search)
 
 	// Health check routes
 	r.GET("/health", s.HealthCheckController.HealthCheck)

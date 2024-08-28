@@ -14,6 +14,7 @@ import (
 type DB interface {
 	PingContext(ctx context.Context) error
 	Close() error
+	GetAll() ([]string, error)
 }
 
 type mysqlDB struct {
@@ -49,4 +50,8 @@ func (m *mysqlDB) PingContext(ctx context.Context) error {
 
 func (m *mysqlDB) Close() error {
 	return m.db.Close()
+}
+
+func (m *mysqlDB) GetAll() ([]string, error) {
+	return []string{"mysql"}, nil
 }

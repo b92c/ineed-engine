@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"context"
+	"log"
 
 	"github.com/b92c/ineed-engine/pkg/database"
 )
@@ -14,14 +15,11 @@ func NewSearchUsecase(db database.DB) *SearchUsecase {
 	return &SearchUsecase{db: db}
 }
 
-func (s *SearchUsecase) GetHealthStatus(ctx context.Context) (map[string]string, error) {
-	stats := make(map[string]string)
-	err := s.db.PingContext(ctx)
+func (s *SearchUsecase) Find(ctx context.Context) ([]string, error) {
+	r, err := s.db.GetAll()
 	if err != nil {
-		stats["status"] = "down"
-		stats["error"] = err.Error()
-		return stats, err
+		log.Fatal("failed to get result from database: ", err)
+		return nil, err
 	}
-	stats["status"] = "up"
-	return stats, nil
+	return r, nil
 }
